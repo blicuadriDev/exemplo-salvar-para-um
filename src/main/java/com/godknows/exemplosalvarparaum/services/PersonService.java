@@ -18,6 +18,17 @@ public class PersonService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+
+    /*PersonDepartmentDTO for
+    JSON (obj aninhado):
+            {
+                "name": "Nova Pessoa",
+                "salary": 8000.0,
+                "department": {
+                        "id": 1
+                }
+             }
+     */
     public PersonDepartmentDTO insert(PersonDepartmentDTO dto) {
 
         Person entity = new Person();
@@ -27,14 +38,7 @@ public class PersonService {
         /*
             Aqui,abaixo, o objeto está sendo monitorado pela JPA pois acessamos o repository para pegar o Id.
             Portanto ao salvar o objeto aninhado irá salvar o Id e puxar tb o nome do departamento.
-            JSON (obj aninhado):
-            {
-                "name": "Nova Pessoa",
-                "salary": 8000.0,
-                "department": {
-                        "id": 1
-                    }
-                }
+
          */
         Department dept = departmentRepository.getReferenceById(dto.getDepartment().getId());
 
@@ -42,12 +46,6 @@ public class PersonService {
         /*
             Aqui, abaixo, o objeto está Transient, ou seja, não monitorado pela JPA.
             Portanto ao salvar o objeto aninhado irá salvar apenas o Id sem puxar o nome do departamento.
-            JSON (obj NÃO-aninhado):
-            {
-                "name": "Nova Pessoa",
-                "salary": 8000.0,
-                "department": 1
-                }
          */
         //Department dept = new Department();
         //dept.setId(dto.getDepartment().getId());
@@ -60,7 +58,16 @@ public class PersonService {
     }
 
 
+
     //Apenas resaltando que posso usar o mesmo nome do método, sobrecarga, pq estamos usando parâmetros diferentes.
+    /*PersonDTO for
+    JSON (obj NÃO-aninhado):
+            {
+            "name": "Nova Pessoa",
+            "salary": 8000.0,
+            "department": 1
+            }
+     */
     public PersonDTO insert(PersonDTO dto) {
 
         Person entity = new Person();
